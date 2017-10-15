@@ -1,7 +1,7 @@
 ## SI 206 W17 - Project 2
 
 ## COMMENT HERE WITH:
-## Your name:
+## Your name: John Falcone
 ## Anyone you worked with on this project:
 
 ## Below we have provided import statements, comments to separate out the
@@ -27,7 +27,19 @@ from bs4 import BeautifulSoup
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
 def find_urls(s):
-    pass
+
+    url_list = []
+    myString = s
+
+    #mySearch = re.search("(https?:\/\/[^\s]+)", myString)
+    mySearch = re.compile("(https?:\/\/[a-z]+\.[a-z.]+)")
+    url_list = mySearch.findall(myString)
+
+    #print(type(mySearch))
+    #url_list.append(mySearch)
+    print(url_list)
+    return url_list
+    #print(mySearch)
     #Your code here
 
 
