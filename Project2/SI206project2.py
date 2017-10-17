@@ -50,8 +50,47 @@ def find_urls(s):
 ## http://www.michigandaily.com/section/opinion
 
 def grab_headlines():
-    pass
-    #Your code here
+    daily_url = "http://www.michigandaily.com/section/opinion"
+    testurl = "opinion.html"
+    
+    r = requests.get(daily_url)
+
+    #soup = BeautifulSoup(r.text, "html5lib")
+    soup = BeautifulSoup(r.text)
+
+    mylist = list(soup.children)
+    #print(mylist)
+    opinionPage = soup.find('div', {"class":"panel-pane pane-mostread"})
+
+    mostRead = opinionPage
+
+    #print(mostRead)
+
+    headlines = mostRead.find('div', {'class':'item-list'})
+
+    #print(headlines)
+
+    #headlinestext = a.get_text()
+    #print (headlinestext)
+    
+    outlist = []
+
+    for a in headlines.findAll('a'):
+        outlist.append(a.get_text())
+
+    #for x in headlines:
+       # if x.a:
+            #outlist = []
+        #    print(x.a)
+        #outtext = x.a.text.replace("\n", ' ').strip()
+            #final_text = outtext[1]
+        #outlist.append(outtext)
+    print(outlist)
+    return outlist
+
+
+
+    #print(mostRead)
 
 
 
