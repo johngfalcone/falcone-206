@@ -52,7 +52,7 @@ def find_urls(s):
 def grab_headlines():
     daily_url = "http://www.michigandaily.com/section/opinion"
     testurl = "opinion.html"
-    
+
     r = requests.get(daily_url)
 
     #soup = BeautifulSoup(r.text, "html5lib")
@@ -85,7 +85,7 @@ def grab_headlines():
         #outtext = x.a.text.replace("\n", ' ').strip()
             #final_text = outtext[1]
         #outlist.append(outtext)
-    print(outlist)
+    #print(outlist)
     return outlist
 
 
@@ -106,8 +106,50 @@ def grab_headlines():
 ## requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
 
 def get_umsi_data():
-    pass
-    #Your code here
+    url_list = ["https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=1", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=2", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=3", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=4", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=5", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=6", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=7", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=8", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=9", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=10", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=11", "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=12"]
+    #print(url_list)
+
+    names_list = []
+    title_list =[]
+
+    for item in url_list:
+        active_url = item
+        #print(active_url)
+
+        r = requests.get(active_url, headers={'User-Agent': 'SI_CLASS'})
+        soup = BeautifulSoup(r.text)
+
+        mylist = list(soup.children)
+        #print(mylist)
+
+        #print(soup)
+
+        namesField = soup.findAll('div', {"class":"field field-name-title field-type-ds field-label-hidden"})
+        #print(namesField)
+        titleField = soup.findAll('div', {'class':'field field-name-field-person-titles field-type-text field-label-hidden'})
+        #for a in namesField.findAll('h2'):
+        #    names_list.append(a.get_text())
+
+        #for a in namesField.find_all('div', {'class':'field-item even'}):
+            #names_list.append(a.get_text())
+        for a in namesField:
+            names_list.append(a.get_text())
+
+        for b in titleField:
+            title_list.append(b.get_text())
+
+    #print(names_list)
+    #print(title_list)
+
+    #new_title_list = title_list[3::4]
+    #print(new_title_list)
+    outdict = {}
+
+    for x in range(min(len(names_list),len(title_list))):
+        outdict[names_list[x]] = title_list[x]
+
+    print(outdict)
+    return outdict
 
 ## PART 3 (b) Define a function called num_students.
 ## INPUT: The dictionary from get_umsi_data().
