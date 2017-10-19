@@ -54,8 +54,9 @@ def grab_headlines():
     testurl = "opinion.html"
 
     r = requests.get(daily_url)
-
-    #soup = BeautifulSoup(r.text, "html5lib")
+    #opinionfile = open("opinion.html", "r")
+    
+    #soup = BeautifulSoup(opinionfile)
     soup = BeautifulSoup(r.text)
 
     mylist = list(soup.children)
@@ -148,15 +149,28 @@ def get_umsi_data():
     for x in range(min(len(names_list),len(title_list))):
         outdict[names_list[x]] = title_list[x]
 
-    print(outdict)
+    #print(outdict)
     return outdict
 
 ## PART 3 (b) Define a function called num_students.
 ## INPUT: The dictionary from get_umsi_data().
 ## OUTPUT: Return number of PhD students in the data.  (Don't forget, I may change the input data)
 def num_students(data):
-    pass
-    #Your code here
+
+    mycount = 0
+    mylist = list(data.values())
+    #print(mylist)
+
+    for x in mylist:
+        if x == "Phd student":
+            mycount = mycount + 1
+        #print(x)
+        #if x.value() == "Phd Student":
+         #   mycount = mycount + 1
+
+    #print(mycount)  
+    mycount2 = mylist.count("PhD student")   
+    return mycount2
 
 
 
