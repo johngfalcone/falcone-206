@@ -32,7 +32,7 @@ def find_urls(s):
     myString = s
 
     #mySearch = re.search("(https?:\/\/[^\s]+)", myString)
-    mySearch = re.compile("(https?:\/\/[a-z]+\.[a-z.]+)")
+    mySearch = re.compile("(https?:\/\/[a-z.1-9]+\.[a-z.]+)")
     url_list = mySearch.findall(myString)
 
     #print(type(mySearch))
@@ -157,13 +157,13 @@ def get_umsi_data():
 ## OUTPUT: Return number of PhD students in the data.  (Don't forget, I may change the input data)
 def num_students(data):
 
-    mycount = 0
+    #mycount = 0
     mylist = list(data.values())
     #print(mylist)
 
-    for x in mylist:
-        if x == "Phd student":
-            mycount = mycount + 1
+    #for x in mylist:
+    #    if x == "Phd student":
+    #        mycount = mycount + 1
         #print(x)
         #if x.value() == "Phd Student":
          #   mycount = mycount + 1
