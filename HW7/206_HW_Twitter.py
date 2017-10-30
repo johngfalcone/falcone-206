@@ -4,8 +4,8 @@ import requests
 import json
 
 ## SI 206 - HW
-## COMMENT WITH:
-## Your section day/time:
+## COMMENT WITH: JOHN FALCONE
+## Your section day/time: Thursday 6:00
 ## Any names of people you worked with on this assignment:
 
 
@@ -46,10 +46,15 @@ import json
 ## Get your secret values to authenticate to Twitter. You may replace each of these 
 ## with variables rather than filling in the empty strings if you choose to do the secure way 
 ## for EC points
-consumer_key = "" 
-consumer_secret = ""
-access_token = ""
-access_token_secret = ""
+import importlib.util
+spec = importlib.util.spec_from_file_location("twitter_info", "C:\Users\John Falcone\Desktop\json-twitter-master\my_twitter_info.py")
+twitter_info = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(twitter_info)
+
+consumer_key = twitter_info.consumer_key 
+consumer_secret = twitter_info.consumer_secret
+access_token = twitter_info.access_token
+access_token_secret = twitter_info.access_token_secret
 ## Set up your authentication to Twitter
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
