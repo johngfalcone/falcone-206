@@ -6,7 +6,7 @@ import json
 ## SI 206 - HW
 ## COMMENT WITH: JOHN FALCONE
 ## Your section day/time: Thursday 6:00
-## Any names of people you worked with on this assignment:
+## Any names of people you worked with on this assignment: Jessica Vu
 
 
 ## Write code that uses the tweepy library to search for tweets with three different phrases of the 
@@ -46,10 +46,24 @@ import json
 ## Get your secret values to authenticate to Twitter. You may replace each of these 
 ## with variables rather than filling in the empty strings if you choose to do the secure way 
 ## for EC points
-import importlib.util
-spec = importlib.util.spec_from_file_location("twitter_info", "C:\Users\John Falcone\Desktop\json-twitter-master\my_twitter_info.py")
-twitter_info = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(twitter_info)
+#import importlib.util
+#spec = importlib.util.spec_from_file_location("twitter_info", "/c/Users/John Falcone/Desktop/json-twitter-master/my_twitter_info.py")
+#twitter_info = importlib.util.module_from_spec(spec)
+#spec.loader.exec_module(twitter_info)
+
+#import sys
+#sys.path.append('/c/Users/John Falcone/Desktop/json-twitter-master/')
+
+#import my_twitter_info
+
+#configfile = '~/my_twitter_info.py'
+
+#import os
+#import sys
+
+#sys.path.append(os.path.dirname(os.path.expanduser(configfile)))
+
+import twitter_info
 
 consumer_key = twitter_info.consumer_key 
 consumer_secret = twitter_info.consumer_secret
@@ -68,17 +82,56 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 #### Recommended order of tasks: ####
 ## 1. Set up the caching pattern start -- the dictionary and the try/except 
 ## 		statement shown in class.
+	
+CACHE_FNAME = "tweets.json"
 
+try:
+	cache_file = open(CACHE_FNAME, "r")
+	cache_contents = cache_file.read()
+	cache_dictionary = json.loads(cache_contents)
+	cache_file.close()
+
+except:
+	cache_dictionary = {}
 
 
 ## 2. Write a function to get twitter data that works with the caching pattern, 
 ## 		so it either gets new data or caches data, depending upon what the input 
-##		to search for is. 
+##		to search for is.
+
+
+print(results)
+
+def call_to_twitter(user_input):
+	search = "twitter_" + user_input
+
+	if search in cache_dictionary:
+		print("Data was in the cache dictionary.")
+		return cache_dictionary[search]
+
+	else:
+		results = api.search(q=user_input)
+		cache_dictionary[search] = results
+		
+		cache_file = open(CACHE_FNAME, "w")
+		cache_file.write(json.dumps(cache_dictionary[search]))
+		cache_dictionary.close()
+
+	return cache_dictionary[search]
+
 
 
 
 ## 3. Using a loop, invoke your function, save the return value in a variable, and explore the 
 ##		data you got back!
+for x in range(3):
+	user_input = input("Enter your search terms:")
+	results = call_to_twitter(user_input)
+
+	for x in results["statuses"][:5]:
+		print("Text ", x["text"])
+		print("\n")
+		print("Created at: ", x["created_at"])
 
 
 ## 4. With what you learn from the data -- e.g. how exactly to find the 
