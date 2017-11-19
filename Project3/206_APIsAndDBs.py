@@ -49,18 +49,38 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 
 CACHE_FNAME = "206_APIsAndDBs_cache.json"
 # Put the rest of your caching setup here:
-
+try:
+    cache_file = open(CACHE_FNAME,'r')
+    cache_contents = cache_file.read()
+    cache_file.close()
+    CACHE_DICTION = json.loads(cache_contents)
+except:
+    CACHE_DICTION = {}
 
 
 # Define your function get_user_tweets here:
+def get_user_tweets(user):
+##YOUR CODE HERE
+    if user in CACHE_DICTION:
+        print("Data in the cache")
+        results = CACHE_DICTION[user]
+    else:
+        print("Fetching")
+        results = api.user_timeline(user)[:20]
+        CACHE_DICTION[user] = results
 
+        f = open(CACHE_FNAME, "w")
+        f.write(json.dumps(CACHE_DICTION))
+        f.close()
+
+    return results
 
 
 
 
 # Write an invocation to the function for the "umich" user timeline and 
 # save the result in a variable called umich_tweets:
-
+umich_tweets = get_user_tweets("umich")
 
 
 
@@ -71,8 +91,18 @@ CACHE_FNAME = "206_APIsAndDBs_cache.json"
 # NOTE: For example, if the user with the "TedXUM" screen name is 
 # mentioned in the umich timeline, that Twitter user's info should be 
 # in the Users table, etc.
+conn = sqlite3.connect("206_APIsAndDBs.sqlite")
+cur = conn.cursor()
 
+cur.execute("DROP TABLE IF EXISTS TWEETS")
+cur.execute('CREATE TABLE Tweets (tweet_id TEXT NOT NULL PRIMARY KEY, text TEXT, user_posted TEXT, time_posted TIMESTAMP, retweets NUMBER)')
 
+cur.execute("DROP TABLE IF EXISTS USERS")
+cur.execute('CREATE TABLE Users (user_id TEXT NOT NULL PRIMARY KEY, screen_name TEXT, num_favs NUMBER, description TEXT)')
+
+for x in umich_tweets:
+    tup = x["tweet_id"], x["text"], x["user_id"], x["time_posted"], x["retweet_count"]
+    cur.execute('INSERT INTO Tweets (tweet_id, author, time_posted, tweet_text, retweets) VALUES(?,?,?,?,?)',tup)
 
 ## You should load into the Tweets table: 
 # Info about all the tweets (at least 20) that you gather from the 
