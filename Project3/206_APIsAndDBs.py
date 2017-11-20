@@ -104,7 +104,7 @@ for x in umich_tweets:
     tup = x["tweet_id"], x["text"], x["user_id"], x["time_posted"], x["retweet_count"]
     cur.execute('INSERT INTO Tweets (tweet_id, author, time_posted, tweet_text, retweets) VALUES(?,?,?,?,?)',tup)
 
-## You should load into the Tweets table: 
+## You should load into the Tweets table: comment
 # Info about all the tweets (at least 20) that you gather from the 
 # umich timeline.
 # NOTE: Be careful that you have the correct user ID reference in 
